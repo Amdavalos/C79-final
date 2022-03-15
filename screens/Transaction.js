@@ -36,8 +36,8 @@ export default class TransactionScreen extends Component {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
 
     this.setState({
-      /*status === "granted" is true when user has granted permission
-          status === "granted" is false when user has not granted the permission
+      /*status === "granted" es cierto (true) cuando se le concede permiso al usuario
+          status === "granted" es falso (false) cuando no se le concede permiso al usuario
         */
       hasCameraPermissions: status === "granted",
       domState: domState,
@@ -77,13 +77,13 @@ export default class TransactionScreen extends Component {
           var { bookName, studentName } = this.state;
           this.initiateBookIssue(bookId, studentId, bookName, studentName);
 
-           Alert.alert("Book issued to the student!");
+           Alert.alert("Libro enviado al alumno");
         } else {
           var { bookName, studentName } = this.state;
           this.initiateBookReturn(bookId, studentId, bookName, studentName);
 
 
-          Alert.alert("Book returned to the library!");
+          Alert.alert("Libro devuelto a la biblioteca");
         }
       });
   };
@@ -117,7 +117,7 @@ export default class TransactionScreen extends Component {
   };
 
   initiateBookIssue = async (bookId, studentId, bookName, studentName) => {
-    //add a transaction
+    //añade una transacción
     db.collection("transactions").add({
       student_id: studentId,
       student_name: studentName,
@@ -126,20 +126,20 @@ export default class TransactionScreen extends Component {
       date: firebase.firestore.Timestamp.now().toDate(),
       transaction_type: "issue"
     });
-    //change book status
+    //cambia el estatus del libro
     db.collection("books")
       .doc(bookId)
       .update({
         is_book_available: false
       });
-    //change number  of issued books for student
+    //cambia el número de libros enviados al alumno
     db.collection("students")
       .doc(studentId)
       .update({
         number_of_books_issued: firebase.firestore.FieldValue.increment(1)
       });
 
-    // Updating local state
+    // Actualiza local state
     this.setState({
       bookId: "",
       studentId: ""
@@ -147,7 +147,7 @@ export default class TransactionScreen extends Component {
   };
 
   initiateBookReturn = async (bookId, studentId, bookName, studentName) => {
-    //add a transaction
+    //añade una transacción
     db.collection("transactions").add({
       student_id: studentId,
       student_name: studentName,
@@ -156,7 +156,7 @@ export default class TransactionScreen extends Component {
       date: firebase.firestore.Timestamp.now().toDate(),
       transaction_type: "return"
     });
-    //change book status
+    //cambia el estatus del libro
     db.collection("books")
       .doc(bookId)
       .update({
@@ -169,7 +169,7 @@ export default class TransactionScreen extends Component {
         number_of_books_issued: firebase.firestore.FieldValue.increment(-1)
       });
 
-    // Updating local state
+    // Actualiza local state
     this.setState({
       bookId: "",
       studentId: ""
@@ -205,7 +205,7 @@ export default class TransactionScreen extends Component {
                 style={styles.scanbutton}
                 onPress={() => this.getCameraPermissions("bookId")}
               >
-                <Text style={styles.scanbuttonText}>Scan</Text>
+                <Text style={styles.scanbuttonText}>Escanear</Text>
               </TouchableOpacity>
             </View>
             <View style={[styles.textinputContainer, { marginTop: 25 }]}>
@@ -220,14 +220,14 @@ export default class TransactionScreen extends Component {
                 style={styles.scanbutton}
                 onPress={() => this.getCameraPermissions("studentId")}
               >
-                <Text style={styles.scanbuttonText}>Scan</Text>
+                <Text style={styles.scanbuttonText}>Escanear</Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity
               style={[styles.button, { marginTop: 25 }]}
               onPress={this.handleTransaction}
             >
-              <Text style={styles.buttonText}>Submit</Text>
+              <Text style={styles.buttonText}>Enviar</Text>
             </TouchableOpacity>
           </View>
         </ImageBackground>
